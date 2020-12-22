@@ -1,0 +1,16 @@
+{
+  "name": "egg",
+  "version": "1.0.0",
+  "description": "egg cli",
+  "main": "index.js",
+  "author": "Shaw",
+  "license": "MIT",
+  "dependencies": {
+    "egg": "^2.29.1",
+    "egg-bin": "^4.15.0",
+    "eslint": "^7.16.0"
+  },
+  "scripts": {
+    "dev": "egg-bin dev"
+  }
+}
