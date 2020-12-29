@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-28 09:38:09
  * @LastEditors: Xdg
- * @LastEditTime: 2020-12-28 20:10:35
+ * @LastEditTime: 2020-12-29 15:28:10
  * @FilePath: \Daily\Javascript\promise.js
  */
 
@@ -244,4 +244,12 @@ Promise.prototype.finally = function (callback) {
       throw error;
     }
   );
+};
+
+// 静态方法
+// 如果Promise.resolve接收到的是一个promise，则会直接返回这个promise；否则，则会进一步执行决议操作
+Promise.resolve = function (value) {
+  return value instanceof Promise
+    ? value
+    : new Promise((resolve) => resolve(value));
 };
