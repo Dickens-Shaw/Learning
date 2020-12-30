@@ -3,11 +3,9 @@
  * @Autor: Xdg
  * @Date: 2020-12-28 09:38:09
  * @LastEditors: Xdg
- * @LastEditTime: 2020-12-29 15:28:10
+ * @LastEditTime: 2020-12-29 18:43:09
  * @FilePath: \Daily\Javascript\promise.js
  */
-
-const { resolve } = require("path");
 
 // 1. 定义表示promise状态的常量
 const PENDING_STATE = "status";
@@ -252,4 +250,81 @@ Promise.resolve = function (value) {
   return value instanceof Promise
     ? value
     : new Promise((resolve) => resolve(value));
+};
+
+// Promise.reject无论收到什么，都会直接以收到的值作为拒绝理由，而不会像resolve一样进行拆解
+Promise.reject = function (reason) {
+  return new Promise((resolve, reject) => reject(reason));
+};
+
+// 如果Promise.race接收到的是一个空数组，则会一直挂起，而不是立即决议
+Promise.race = function (promises) {
+  return new Promise((resolve, reject) => {
+    promises.forEach((promise) => {
+      Promise.resolve(promise).then(resolve, reject);
+    });
+  });
+};
+
+Promise.all = function (promises) {
+  return new Promise((resolve, reject) => {
+    // 如果Promise.all接收到一个空数组，它会立即决议
+    if (!promises.length) {
+      resolve([]);
+    }
+
+    let result = [];
+    let resolvePro = 0;
+    for (let index = 0, length = promises.length; index < length; index++) {
+      Promise.resolve(promises[index]).then(
+        (data) => {
+          // 注意，这里要用index赋值，而不是push，因为要保持返回值和接收到的promise的位置一致性
+          result[index] = data;
+          if (++resolvePro === length) {
+            resolve(result);
+          }
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    }
+  });
+};
+
+// Promise.allSettled返回一个在所有给定的promise都已经fulfilled或rejected后的promise,
+// 并带有一个对象数组，每个对象表示对应的promise的结果
+Promise.allSettled = function (promises) {
+  return new Promise((resolve, reject) => {
+    // 如果Promise.all接收到一个空数组，它会立即决议
+    if (!promises.length) {
+      resolve([]);
+    }
+
+    let result = [];
+    let resolvePro = 0;
+    for (let index = 0, length = promises.length; index < length; index++) {
+      Promise.resolve(promises[index]).then(
+        (data) => {
+          // 注意，这里要用index赋值，而不是push，因为要保持返回值和接收到的promise的位置一致性
+          result[index] = {
+            status: FULFILLED_STATE,
+            value: data,
+          };
+          if (++resolvePro === length) {
+            resolve(result);
+          }
+        },
+        (error) => {
+          result[index] = {
+            status: REJECTED_STATE,
+            reason: error,
+          };
+          if (++resolvePro === length) {
+            resolve(result);
+          }
+        }
+      );
+    }
+  });
 };
