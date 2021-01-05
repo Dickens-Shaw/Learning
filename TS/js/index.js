@@ -1,24 +1,24 @@
 "use strict";
 /*
- * @Description: Typescript
+ * @Description: TypeScript
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2020-12-31 16:57:35
- * @FilePath: \Daily\Typescript\index.ts
+ * @LastEditTime: 2021-01-05 19:28:32
+ * @FilePath: \Daily\TS\index.ts
  */
-// 基础类型
-// Boollean
+// 二、基础类型
+// 2.1 Boollean
 let isDone = false;
-// Number
+// 2.2 Number
 let count = 1;
-// String
+// 2.3 String
 let username = "a";
-// Array
+// 2.4 Array
 let list1 = [1, 2, 3];
 let list2 = ["1", "2", "3"];
-// Enum
-// 使用枚举我们可以定义一些带名字的常量。使用枚举可以清晰地表达意图或创建一组有区别的用例。Typescript支持数字的和基于字符串的枚举。
+// 2.5 Enum
+// 使用枚举我们可以定义一些带名字的常量。使用枚举可以清晰地表达意图或创建一组有区别的用例。TypeScript支持数字的和基于字符串的枚举。
 // 数字枚举
 var Direction;
 (function (Direction) {
@@ -48,7 +48,7 @@ var Enum;
 })(Enum || (Enum = {}));
 console.log(Enum[0]);
 console.log(Enum.A);
-// Any
+// 2.6 Any
 // 在TypeScript中，任何的类型都可以被归为any类型。这让any类型成了类型系统的顶级类型（也被称作全局超级类型）。
 let notSure = 666;
 notSure = "666";
@@ -60,7 +60,7 @@ value.trim();
 value();
 new value();
 value[0][1];
-// Unkonwn
+// 2.7 Unkonwn
 // 所有类型都可以赋值给unknown。unknown也是一种顶级类型
 let value2;
 value2 = true;
@@ -88,14 +88,57 @@ let value22 = value3;
 // new value3(); // Error
 // value3[0][1]; // Error
 // 将value变量类型设置为unknown后，这些操作都不在被认为是类型正确的。通过将any类型改变为unknow类型，我们已将允许所有更改的默认设置，更改为禁止任何更改。
-// Tuple
+// 2.8 Tuple
 // 数组一般由同种类型的值组成，但有时我们需要在单个变量中存储不同类型的值，只时候我们就可以使用元组。在JavaScrip中是没有元组的，元组是TypeScript中特有的类型，其工作方式类似于数组。
 // 元组可用于定义具有有限数量的未命名属性的类型。每个属性都有一个相关联的类型。使用元组时，必须提供每个属性的值。
 let tupleTupe;
 tupleTupe = ["a", false];
-// Void
+// 2.9 Void
 // 某种程度上来说，void类型像是与any类型相反，它表示没有任何类型。当一个函数没有任何返回值时，你通常会见到其返回值类型是void
 // 声明函数返回值是void
 function warnUser() {
     console.log("That is mi warning message");
 }
+// 需要注意的是，声明一个void类型的变量没有什么作用，因为它的值只能为undifined或null
+let unusable = undefined;
+// 2.10 Null和Undefined
+// TypeScript里，undefined和null两者有各自的类型分别为undefined和null
+let u = undefined;
+let n = null;
+// 默认情况下null和undefined是所有类型的子类型。就是说你可以把null和undefined赋值给number类型的变量。
+// 然而，如果你指定了--strictNullChecks标记，null和undefined只能赋值给void和它们各自的类型。
+// 2.11 Never
+// never类型表示的是那些永远不存在的值的类型。例如，never类型是那些总会抛出异常或者根本就不会有返回值的函数表达式或箭头函数式的返回值类型。
+function error(message) {
+    throw new Error(message);
+}
+function infiniteLoop() {
+    while (true) { }
+}
+// 在TypeScript中，可以利用never类型的特性来实现全面性检查：使用 never 避免出现新增了联合类型没有对应的实现，目的就是写出类型绝对安全的代码。
+// 三、断言
+// 3.1尖括号语法
+let someValue = "this is a string";
+let strLength = someValue.length;
+// 3.2 as语法
+let strLength2 = someValue.length;
+function printEmployeeInformation(emp) {
+    console.log("Name:" + emp.name);
+    if ("privileges" in emp) {
+        console.log("Privileges:" + emp.privileges);
+    }
+    if ("startDate" in emp) {
+        console.log("Start Date:" + emp.startDate);
+    }
+}
+// 4.2 typeof 关键字
+function padLeft(value, padding) {
+    if (typeof padding === "number") {
+        return Array(padding + 1).join(" ") + value;
+    }
+    if (typeof padding === "string") {
+        return padding + value;
+    }
+    throw new Error(`Expected string or number, got '${padding}'`);
+}
+// typeof类型保护只支持两种形式： typeof v === typename 和 typeof v !== typename, typename必须是 number, string, boolean或symbol。但是TypeScript并不会阻止你与其它字符串比较，语言不会把那些表达式识别为类型保护。
