@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-05 19:28:32
+ * @LastEditTime: 2021-01-06 20:20:42
  * @FilePath: \Daily\TS\index.ts
  */
 
@@ -177,3 +177,321 @@ function padLeft(value: string, padding: string | number) {
   throw new Error(`Expected string or number, got '${padding}'`);
 }
 // typeof类型保护只支持两种形式： typeof v === typename 和 typeof v !== typename, typename必须是 number, string, boolean或symbol。但是TypeScript并不会阻止你与其它字符串比较，语言不会把那些表达式识别为类型保护。
+
+// 4.3 instanceof 关键字
+interface Padder {
+  getPaddingString(): string;
+}
+class SpaceRepeatingPadder implements Padder {
+  constructor(private numSpaces: number) {}
+  getPaddingString() {
+    return Array(this.numSpaces + 1).join(" ");
+  }
+}
+class StringPadder implements Padder {
+  constructor(private value: string) {}
+  getPaddingString() {
+    return this.value;
+  }
+}
+let padder: Padder = new SpaceRepeatingPadder(6);
+if (padder instanceof SpaceRepeatingPadder) {
+  // padder的类型收窄为'SpaceRepeatingPadder'
+}
+
+// 4.4 自定义类型保护的类型谓词
+function isNumber(x: any): x is number {
+  return typeof x === "number";
+}
+
+function isStrin(x: any): x is string {
+  return typeof x === "string";
+}
+
+// 五、联合类型和类型别名
+// 5.1 联合类型
+// 联合类型通常与null和undefined一起使用
+const sayHello = (name: string | undefined) => {
+  /* ... */
+};
+// 例如这里name的类型是string|undefined意味着可以将string或undefined的值传递给sayHello函数
+sayHello("Semlinker");
+sayHello(undefined);
+
+// 5.2 可辨识联合
+// TypeScript可辨识联合（Discriminated Unions）类型，也成为代数数据类型或标签联合类型。它包含3个要点：可辨识、联合类型和类型守卫。
+// 这种类型的本质是结合类型和字面量类型的一种保护方法。如果一个类型是多个类型的联合类型，且多个类型含有一个公共属性，那么就可以利用这个公共属性，来创建不同的类型保护区块。
+// 1.可辨识
+enum CarTransmission {
+  Automatic = 200,
+  Manual = 300,
+}
+interface Motorcycle {
+  vType: "motorcycle";
+  make: number;
+}
+interface Car {
+  vType: "car";
+  transmission: CarTransmission;
+}
+interface Truck {
+  vType: "truck";
+  capacity: number;
+}
+// 在上述代码中，我们分别定义了Motorcycle\Car和Truck三个接口，在这些接口中都含一个vType属性，该属性被称为可辨识的属性，而其它的属性只跟特性的接口相关。
+
+// 2.联合类型
+// 基于前面定义的三个接口，我们可以创建一个Vehicle联合类型：
+type Vehicle = Motorcycle | Car | Truck;
+
+// 3.类型守卫
+// 下面我们定义一个evaluatePrice方法，根据车辆的类型、容量和评估因子来计算价格：
+const EVALUATION_FACTOR = Math.PI;
+// function evaluatePrice(vehicle: Vehicle): number {
+//   return vehicle.capacity * EVALUATION_FACTOR;
+// }
+const myTruck: Truck = {
+  vType: "truck",
+  capacity: 9.5,
+};
+evaluatePrice(myTruck);
+// 在Motorcycle接口中，并不存在capacity属性，
+function evaluatePrice(vehicle: Vehicle) {
+  switch (vehicle.vType) {
+    case "car":
+      return vehicle.transmission * EVALUATION_FACTOR;
+    case "truck":
+      return vehicle.capacity * EVALUATION_FACTOR;
+    case "motorcycle":
+      return vehicle.make * EVALUATION_FACTOR;
+  }
+}
+// 使用switch和case运算符实现类型首位，确保在evaluatePrice方法中，可以安全访问vehicle对象中的所包含的属性，来正确的计算车辆类型所对应的价格
+
+// 5.3 类型别名
+// 类型别名用来给一个类型起个新名字
+type Message = string | string[];
+let greet = (message: Message) => {
+  // ...
+};
+
+// 六、交叉类型
+// TypeScript交叉类型是将多个类型合并为一个类型。这让我们可以把现有的多种类型叠加到一起成为一种类型，它包含了所需的所有类型的特性。
+interface IPerson {
+  id: string;
+  age: number;
+}
+interface IWorker {
+  companyId: string;
+}
+type IStaff = IPerson & IWorker;
+const staff: IStaff = {
+  id: "qweqe",
+  age: 33,
+  companyId: "ASD",
+};
+console.dir(staff);
+// 在上面示例中，首先为IPerson和IWorker类型定义了不同的成员，然后通过&运算符定义了IStaff交叉类型，所以该类型同时拥有IPerson和IWorker这两种类型的成员
+
+// 七、函数
+// 7.1 TS函数和JS函数区别
+/* 
+    TypeScript	JavaScript
+      含有类型	无类型
+      箭头函数	箭头函数（ES2015）
+      函数类型	无函数类型
+必填和可选参数	所有参数都是可选的
+      默认参数	默认参数
+      剩余参数	剩余参数
+      函数重载	无函数重载 
+*/
+
+// 7.2 箭头函数
+
+// 7.3 参数类型和返回类型
+function createUserId(name: string = "小明", id: number, age?: number): string {
+  return name + id;
+}
+
+// 7.4 函数类型
+let IdGenerator: (chars: string, nums: number) => string;
+IdGenerator = createUserId;
+
+// 7.5 可选参数及默认参数（见7.3）
+// 可选参数要放在普通参数的后面，不然会导致编译错误
+
+// 7.6 剩余参数
+// function push(array, ...items) {
+//   items.forEach(function (item) {
+//     array.push(item);
+//   });
+// }
+
+// 7.7 函数重载
+// 函数重载或方法重载是使用相同名称和不同参数数量或类型创建多个方法的一种能力。要解决前面遇到的问题，方法就是为同一个函数提供多个函数类型定义来进行函数重载，编译器会根据这个列表去处理函数的调用。
+type Combinable = number | string;
+function add(a: number, b: number): number;
+function add(a: string, b: string): string;
+function add(a: string, b: number): string;
+function add(a: number, b: string): string;
+function add(a: Combinable, b: Combinable): Combinable {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+  return a + b;
+}
+// 在以上代码中，我们为add函数提供了多个函数定义类型，从而实现函数的重载。之后，可恶的错误消息又消失了，因为这时result变量的类型是string类型。
+// 在TypeScript中除了可以重载普通函数之外，我们还可以重载类中的成员方法。
+// 方法重载是指在同一个类中的方法同名，参数不同（类型、个数、顺序），调用时根据实参的形式，选择与它匹配的方法执行操作的一种技术。
+// 所以类中成员方法满足重载的条件是：同一个类中，方法名相同且参数列表不同。、
+class Calculator {
+  add(a: number, b: number): number;
+  add(a: string, b: string): string;
+  add(a: string, b: number): string;
+  add(a: number, b: string): string;
+  add(a: Combinable, b: Combinable) {
+    if (typeof a === "string" || typeof b === "string") {
+      return a.toString() + b.toString();
+    }
+    return a + b;
+  }
+}
+const calculator = new Calculator();
+const result = calculator.add("Semlinker", " Kakuqo");
+// 这里需要注意的是，当 TypeScript 编译器处理函数重载时，它会查找重载列表，尝试使用第一个重载定义。 如果匹配的话就使用这个。 因此，在定义重载的时候，一定要把最精确的定义放在最前面。另外在 Calculator 类中，add(a: Combinable, b: Combinable){ } 并不是重载列表的一部分，因此对于 add 成员方法来说，我们只定义了四个重载方法。
+
+// 八、数组
+// 8.1 数组解构
+let x: number;
+let y: number;
+let z: number;
+let five_array = [0, 1, 2, 3, 4];
+[x, y, z] = five_array;
+
+// 8.2 数组展开运算符
+let two_array = [0, 1];
+let five_array2 = [...two_array, 2, 3, 4];
+
+// 8.3 数组遍历
+let colors: string[] = ["red", "green", "blue"];
+for (let i of colors) {
+  console.log(i);
+}
+
+// 九、对象
+// 9.1 对象解构
+let person = {
+  name2: "Semlinker",
+  gender: "Male",
+};
+let { name2, gender } = person;
+
+// 9.2 对象展开运算符
+let person2 = {
+  name3: "Semlinker",
+  gender: "Male",
+  address: "Xiamen",
+};
+// 组装对象
+let personWithAge = { ...person, age: 33 };
+// 获取除了某些项外的其它项
+let { name3, ...rest } = person2;
+
+// 十、接口
+// 在面向对象语言中，借口是一个很重要的概念，它是对行为的抽象，而具体如何行动需要类去实现。
+// TypeScript中的接口是一个非常灵活的概念，除了可以用于对类的一部分行为进行抽象以外，也常用于对对象的形状（Shape）进行描述。
+// 10.1 对象的形状
+interface Person {
+  name: string;
+  age: number;
+}
+let Semlinker: Person = {
+  name: "Semlinker",
+  age: 33,
+};
+
+// 10.2 可选|只读属性
+interface Person2 {
+  readonly name: string;
+  age?: number;
+}
+
+// 只读属性用于限制只能在对象刚刚创建的时候修改其值。此外TypeScript还提供了ReadonlyArray<T>类型，它与Array<T>相似，只是把所有可变方法去掉了，因此可以确保数组创建后再也不能被修改。
+let a: number[] = [1, 2, 3, 4];
+let ro: ReadonlyArray<number> = a;
+// ro[0] = 12; // error!
+// ro.push(5); // error!
+// ro.length = 100; // error!
+// a = ro; // error!
+
+// 十一、类
+// 11.1 类的属性与方法
+// 在面向对象语言中，类是一种面向对象计算机编程语言的构造，是创建对象的蓝图，描述了所创建的对象共同的属性和方法。
+// 在TypeScript中，通过Class关键字定义类
+class Greeter {
+  // 静态属性
+  static cname: string = "Greeter";
+  // 成员属性
+  greeting: string;
+  // 构造函数-执行初始化操作
+  constructor(message: string) {
+    this.greeting = message;
+  }
+  // 静态方法
+  static getClassName() {
+    return "Class name isGreeter";
+  }
+  // 成员方法
+  greet() {
+    return "Hello," + this.greeting;
+  }
+}
+let greeter = new Greeter("world");
+
+// 11.2 访问器
+// 通过getter和setter方法来实现数据的封装和有效性校验，防止出现异常数据。
+let passcode = "Hello TypeScript";
+class Employee {
+  private _fullName: string = "";
+  get fullName(): string {
+    return this._fullName;
+  }
+  set fullName(newName: string) {
+    if (passcode && passcode == "Hello TypeScript") {
+      this._fullName = newName;
+    } else {
+      console.log("Error: Unauthorized update of employee!");
+    }
+  }
+}
+let employee = new Employee();
+employee.fullName = "Semlinker";
+if (employee.fullName) {
+  console.log(employee.fullName);
+}
+
+// 11.3 类的继承
+// 继承（Inheritance）是一种联结类与类的层次模型。指的是一个类（称为子类、子接口）继承另外一个类（称为父类、父接口）的功能，并可以增加它自己的新功能的能力，继承是类与类或者接口或接口之间最常见的关系。
+// 继承是一种is-a关系，在TypeScript中，通过extends关键字来实现继承
+class Animal {
+  name: string;
+  constructor(theName: string) {
+    this.name = theName;
+  }
+  move(distanceInMetters: number = 0) {
+    console.log(`${this.name} moved ${distanceInMetters}m.`);
+  }
+}
+
+class Snake extends Animal {
+  constructor(name: string) {
+    super(name);
+  }
+
+  move(distanceInMetters = 5) {
+    console.log("Slithering...");
+    super.move(distanceInMetters);
+  }
+}
+let sam = new Snake("Sammy the Python");
+sam.move();

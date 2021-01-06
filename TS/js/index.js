@@ -4,9 +4,20 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-05 19:28:32
+ * @LastEditTime: 2021-01-06 20:20:42
  * @FilePath: \Daily\TS\index.ts
  */
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 // 二、基础类型
 // 2.1 Boollean
 let isDone = false;
@@ -141,4 +152,231 @@ function padLeft(value, padding) {
     }
     throw new Error(`Expected string or number, got '${padding}'`);
 }
-// typeof类型保护只支持两种形式： typeof v === typename 和 typeof v !== typename, typename必须是 number, string, boolean或symbol。但是TypeScript并不会阻止你与其它字符串比较，语言不会把那些表达式识别为类型保护。
+class SpaceRepeatingPadder {
+    constructor(numSpaces) {
+        this.numSpaces = numSpaces;
+    }
+    getPaddingString() {
+        return Array(this.numSpaces + 1).join(" ");
+    }
+}
+class StringPadder {
+    constructor(value) {
+        this.value = value;
+    }
+    getPaddingString() {
+        return this.value;
+    }
+}
+let padder = new SpaceRepeatingPadder(6);
+if (padder instanceof SpaceRepeatingPadder) {
+    // padder的类型收窄为'SpaceRepeatingPadder'
+}
+// 4.4 自定义类型保护的类型谓词
+function isNumber(x) {
+    return typeof x === "number";
+}
+function isStrin(x) {
+    return typeof x === "string";
+}
+// 五、联合类型和类型别名
+// 5.1 联合类型
+// 联合类型通常与null和undefined一起使用
+const sayHello = (name) => {
+    /* ... */
+};
+// 例如这里name的类型是string|undefined意味着可以将string或undefined的值传递给sayHello函数
+sayHello("Semlinker");
+sayHello(undefined);
+// 5.2 可辨识联合
+// TypeScript可辨识联合（Discriminated Unions）类型，也成为代数数据类型或标签联合类型。它包含3个要点：可辨识、联合类型和类型守卫。
+// 这种类型的本质是结合类型和字面量类型的一种保护方法。如果一个类型是多个类型的联合类型，且多个类型含有一个公共属性，那么就可以利用这个公共属性，来创建不同的类型保护区块。
+// 1.可辨识
+var CarTransmission;
+(function (CarTransmission) {
+    CarTransmission[CarTransmission["Automatic"] = 200] = "Automatic";
+    CarTransmission[CarTransmission["Manual"] = 300] = "Manual";
+})(CarTransmission || (CarTransmission = {}));
+// 3.类型守卫
+// 下面我们定义一个evaluatePrice方法，根据车辆的类型、容量和评估因子来计算价格：
+const EVALUATION_FACTOR = Math.PI;
+// function evaluatePrice(vehicle: Vehicle): number {
+//   return vehicle.capacity * EVALUATION_FACTOR;
+// }
+const myTruck = {
+    vType: "truck",
+    capacity: 9.5,
+};
+evaluatePrice(myTruck);
+// 在Motorcycle接口中，并不存在capacity属性，
+function evaluatePrice(vehicle) {
+    switch (vehicle.vType) {
+        case "car":
+            return vehicle.transmission * EVALUATION_FACTOR;
+        case "truck":
+            return vehicle.capacity * EVALUATION_FACTOR;
+        case "motorcycle":
+            return vehicle.make * EVALUATION_FACTOR;
+    }
+}
+let greet = (message) => {
+    // ...
+};
+const staff = {
+    id: "qweqe",
+    age: 33,
+    companyId: "ASD",
+};
+console.dir(staff);
+// 在上面示例中，首先为IPerson和IWorker类型定义了不同的成员，然后通过&运算符定义了IStaff交叉类型，所以该类型同时拥有IPerson和IWorker这两种类型的成员
+// 七、函数
+// 7.1 TS函数和JS函数区别
+/*
+    TypeScript	JavaScript
+      含有类型	无类型
+      箭头函数	箭头函数（ES2015）
+      函数类型	无函数类型
+必填和可选参数	所有参数都是可选的
+      默认参数	默认参数
+      剩余参数	剩余参数
+      函数重载	无函数重载
+*/
+// 7.2 箭头函数
+// 7.3 参数类型和返回类型
+function createUserId(name = "小明", id, age) {
+    return name + id;
+}
+// 7.4 函数类型
+let IdGenerator;
+IdGenerator = createUserId;
+function add(a, b) {
+    if (typeof a === "string" || typeof b === "string") {
+        return a.toString() + b.toString();
+    }
+    return a + b;
+}
+// 在以上代码中，我们为add函数提供了多个函数定义类型，从而实现函数的重载。之后，可恶的错误消息又消失了，因为这时result变量的类型是string类型。
+// 在TypeScript中除了可以重载普通函数之外，我们还可以重载类中的成员方法。
+// 方法重载是指在同一个类中的方法同名，参数不同（类型、个数、顺序），调用时根据实参的形式，选择与它匹配的方法执行操作的一种技术。
+// 所以类中成员方法满足重载的条件是：同一个类中，方法名相同且参数列表不同。、
+class Calculator {
+    add(a, b) {
+        if (typeof a === "string" || typeof b === "string") {
+            return a.toString() + b.toString();
+        }
+        return a + b;
+    }
+}
+const calculator = new Calculator();
+const result = calculator.add("Semlinker", " Kakuqo");
+// 这里需要注意的是，当 TypeScript 编译器处理函数重载时，它会查找重载列表，尝试使用第一个重载定义。 如果匹配的话就使用这个。 因此，在定义重载的时候，一定要把最精确的定义放在最前面。另外在 Calculator 类中，add(a: Combinable, b: Combinable){ } 并不是重载列表的一部分，因此对于 add 成员方法来说，我们只定义了四个重载方法。
+// 八、数组
+// 8.1 数组解构
+let x;
+let y;
+let z;
+let five_array = [0, 1, 2, 3, 4];
+[x, y, z] = five_array;
+// 8.2 数组展开运算符
+let two_array = [0, 1];
+let five_array2 = [...two_array, 2, 3, 4];
+// 8.3 数组遍历
+let colors = ["red", "green", "blue"];
+for (let i of colors) {
+    console.log(i);
+}
+// 九、对象
+// 9.1 对象解构
+let person = {
+    name2: "Semlinker",
+    gender: "Male",
+};
+let { name2, gender } = person;
+// 9.2 对象展开运算符
+let person2 = {
+    name3: "Semlinker",
+    gender: "Male",
+    address: "Xiamen",
+};
+// 组装对象
+let personWithAge = Object.assign(Object.assign({}, person), { age: 33 });
+// 获取除了某些项外的其它项
+let { name3 } = person2, rest = __rest(person2, ["name3"]);
+let Semlinker = {
+    name: "Semlinker",
+    age: 33,
+};
+// 只读属性用于限制只能在对象刚刚创建的时候修改其值。此外TypeScript还提供了ReadonlyArray<T>类型，它与Array<T>相似，只是把所有可变方法去掉了，因此可以确保数组创建后再也不能被修改。
+let a = [1, 2, 3, 4];
+let ro = a;
+// ro[0] = 12; // error!
+// ro.push(5); // error!
+// ro.length = 100; // error!
+// a = ro; // error!
+// 十一、类
+// 11.1 类的属性与方法
+// 在面向对象语言中，类是一种面向对象计算机编程语言的构造，是创建对象的蓝图，描述了所创建的对象共同的属性和方法。
+// 在TypeScript中，通过Class关键字定义类
+class Greeter {
+    // 构造函数-执行初始化操作
+    constructor(message) {
+        this.greeting = message;
+    }
+    // 静态方法
+    static getClassName() {
+        return "Class name isGreeter";
+    }
+    // 成员方法
+    greet() {
+        return "Hello," + this.greeting;
+    }
+}
+// 静态属性
+Greeter.cname = "Greeter";
+let greeter = new Greeter("world");
+// 11.2 访问器
+// 通过getter和setter方法来实现数据的封装和有效性校验，防止出现异常数据。
+let passcode = "Hello TypeScript";
+class Employee {
+    constructor() {
+        this._fullName = "";
+    }
+    get fullName() {
+        return this._fullName;
+    }
+    set fullName(newName) {
+        if (passcode && passcode == "Hello TypeScript") {
+            this._fullName = newName;
+        }
+        else {
+            console.log("Error: Unauthorized update of employee!");
+        }
+    }
+}
+let employee = new Employee();
+employee.fullName = "Semlinker";
+if (employee.fullName) {
+    console.log(employee.fullName);
+}
+// 11.3 类的继承
+// 继承（Inheritance）是一种联结类与类的层次模型。指的是一个类（称为子类、子接口）继承另外一个类（称为父类、父接口）的功能，并可以增加它自己的新功能的能力，继承是类与类或者接口或接口之间最常见的关系。
+// 继承是一种is-a关系，在TypeScript中，通过extends关键字来实现继承
+class Animal {
+    constructor(theName) {
+        this.name = theName;
+    }
+    move(distanceInMetters = 0) {
+        console.log(`${this.name} moved ${distanceInMetters}m.`);
+    }
+}
+class Snake extends Animal {
+    constructor(name) {
+        super(name);
+    }
+    move(distanceInMetters = 5) {
+        console.log("Slithering...");
+        super.move(distanceInMetters);
+    }
+}
+let sam = new Snake("Sammy the Python");
+sam.move();
