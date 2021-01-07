@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-06 20:20:42
+ * @LastEditTime: 2021-01-07 18:01:39
  * @FilePath: \Daily\TS\index.ts
  */
 
@@ -134,13 +134,66 @@ function infiniteLoop(): never {
 }
 // 在TypeScript中，可以利用never类型的特性来实现全面性检查：使用 never 避免出现新增了联合类型没有对应的实现，目的就是写出类型绝对安全的代码。
 
+// 2.12 Symbol
+const sym = Symbol();
+let obj = {
+  [sym]: "Shaw",
+};
+console.log(obj[sym]);
+
+// 2.13 object, Object和 {}
+// 1.object 类型
+// object 类型是：TypeScript 2.2 引入的新类型，它用于表示非原始类型。
+interface ObjectConstructor {
+  create(o: object | null): any;
+  // ...
+}
+const proto = {};
+Object.create(proto); // OK
+Object.create(null); // OK
+// Object.create(undefined); // Error
+// Object.create(1337);      // Error
+// Object.create(true);      // Error
+// Object.create("oops");    // Error
+
+// 2.Object类型
+//
+
 // 三、断言
-// 3.1尖括号语法
+// 3.1 类型断言
+// 1.尖括号语法
 let someValue: any = "this is a string";
 let strLength: number = (<string>someValue).length;
 
-// 3.2 as语法
+// 2.as语法
 let strLength2: number = (someValue as string).length;
+
+// 3.2 非空断言
+// 在上下文中当类型检查器无法断定类型时，一个新的后缀表达式操作符！可以用于断言操作对象是非null和非undefined类型。
+// 具体而言，x!将从x值域中排出null和undefined。
+// 1.忽略undefined和null类型
+function myFunc(maybeSring: string | null | undefined) {
+  const onlyString: string = maybeSring!;
+}
+
+// 2.调用函数式忽略undefined类型
+type NumGenerator = () => number;
+function myFunc2(numGenerator: NumGenerator | undefined) {
+  const num = numGenerator!();
+}
+// 因为！非空断言操作符会从编译生成的JavaScript代码中移除，所以在实际使用过程中，要特别注意。比如：
+const aa: number | undefined = undefined;
+const bb: number = aa!;
+console.log(bb);
+
+// 3.3 确定赋值断言
+// 在2.7版本中引入了确定赋值断言，即允许在实例属性和变量声明后面放置一个！号，从而告诉TypeScript该属性会被明确地赋值。
+let xx!: number;
+initialize();
+console.log(2 * xx); // Ok
+function initialize() {
+  x = 10;
+}
 
 // 四、类型守卫
 // A tpye guard is some experssion that performs a untime check that guarantees the type in some scope.
@@ -215,7 +268,7 @@ const sayHello = (name: string | undefined) => {
   /* ... */
 };
 // 例如这里name的类型是string|undefined意味着可以将string或undefined的值传递给sayHello函数
-sayHello("Semlinker");
+sayHello("Shaw");
 sayHello(undefined);
 
 // 5.2 可辨识联合
@@ -357,7 +410,7 @@ class Calculator {
   }
 }
 const calculator = new Calculator();
-const result = calculator.add("Semlinker", " Kakuqo");
+const result = calculator.add("Shaw", " Kakuqo");
 // 这里需要注意的是，当 TypeScript 编译器处理函数重载时，它会查找重载列表，尝试使用第一个重载定义。 如果匹配的话就使用这个。 因此，在定义重载的时候，一定要把最精确的定义放在最前面。另外在 Calculator 类中，add(a: Combinable, b: Combinable){ } 并不是重载列表的一部分，因此对于 add 成员方法来说，我们只定义了四个重载方法。
 
 // 八、数组
@@ -381,14 +434,14 @@ for (let i of colors) {
 // 九、对象
 // 9.1 对象解构
 let person = {
-  name2: "Semlinker",
+  name2: "Shaw",
   gender: "Male",
 };
 let { name2, gender } = person;
 
 // 9.2 对象展开运算符
 let person2 = {
-  name3: "Semlinker",
+  name3: "Shaw",
   gender: "Male",
   address: "Xiamen",
 };
@@ -405,8 +458,8 @@ interface Person {
   name: string;
   age: number;
 }
-let Semlinker: Person = {
-  name: "Semlinker",
+let Shaw: Person = {
+  name: "Shaw",
   age: 33,
 };
 
@@ -452,7 +505,7 @@ let greeter = new Greeter("world");
 // 通过getter和setter方法来实现数据的封装和有效性校验，防止出现异常数据。
 let passcode = "Hello TypeScript";
 class Employee {
-  private _fullName: string = "";
+  private _fullName!: string;
   get fullName(): string {
     return this._fullName;
   }
@@ -465,7 +518,7 @@ class Employee {
   }
 }
 let employee = new Employee();
-employee.fullName = "Semlinker";
+employee.fullName = "Shaw";
 if (employee.fullName) {
   console.log(employee.fullName);
 }
@@ -495,3 +548,139 @@ class Snake extends Animal {
 }
 let sam = new Snake("Sammy the Python");
 sam.move();
+
+// 11.4 ECMAScript私有字段
+class Person2 {
+  #name: string;
+  constructor(name: string) {
+    this.#name = name;
+  }
+  greet() {
+    console.log(`Hello,my name is ${this.#name}`);
+  }
+}
+let Shaw2 = new Person2("Shaw");
+
+// 11.5 抽象类
+// 使用abstract关键字声明的类，我们称之为抽象类。抽象类不能被实例化，因为它里面包含了一个或多个抽象方法。所谓抽象方法，是指不包含具体实现的方法：
+abstract class Person3 {
+  constructor(public name: string) {}
+  // 抽象方法
+  abstract say(words: string): void;
+}
+// const lolo = new Person2('lolo'); // Cannot create an instance of an abstract class.(2511)
+// 抽象类不能被直接实例化，我们只能实例化实现了所有抽象方法的子类。
+class Developer extends Person3 {
+  constructor(name: string) {
+    super(name);
+  }
+
+  say(words: string): void {
+    console.log(`${this.name} says ${words}`);
+  }
+}
+
+const lolo = new Developer("lolo");
+lolo.say("I love ts!"); // lolo says I love ts!
+
+// 十二、泛型
+// 设计泛型的关键目的是在成员之间提供有意义的约束，这些成员可以是：类的实例成员、类的方法、函数参数和函数返回值。
+// 泛型（Generics）是允许同一个函数接受不同类型参数的一种模板。相比于使用any，使用泛型来创建可复用的组件要更好，因为泛型会保留参数。
+// 12.1 泛型语法
+// 对于刚接触TypeScript泛型的读者涞水，首次看到<T>语法会感到陌生。其实它并没有什么特别，就像传递参数一样，我们传递了我们想要用于特定函数调用的类型。
+function identity<T>(value: T): T {
+  return value;
+}
+// 当我们调用  identity<Number>(1) ，Number 类型就像参数 1 一样，它将在出现 T 的任何位置填充该类型。图中 <T> 内部的 T 被称为类型变量，它是我们希望传递给 identity 函数的类型占位符，同时它被分配给 value 参数用来代替它的类型：此时 T 充当的是类型，而不是特定的 Number 类型。
+// 其中 T 代表 Type，在定义泛型时通常用作第一个类型变量名称。但实际上 T 可以用任何有效名称代替。
+// 除了 T 之外，以下是常见泛型变量代表的意思：
+/*  K（Key）：表示对象中的键类型；
+    V（Value）：表示对象中的值类型；
+    E（Element）：表示元素类型。
+*/
+// 其实并不是只能定义一个类型变量，我们可以引入希望定义的任何数量的类型变量。
+// 比如我们引入一个新的变量U，用于拓展identity函数：
+function identity2<T, U>(value: T, message: U): T {
+  console.log(message);
+  return value;
+}
+console.log(identity2<number, string>(68, "Shaw"));
+// 除了为类型变量显式设定值之外，一种更常见的做法是使编译器自动选择这些类型，从而使代码更简洁。我们可以完全省略尖括号。
+console.log(identity2(68, "Shaw"));
+
+// 12.2 泛型接口
+interface GenericIdentityFn<T> {
+  (arg: T): T;
+}
+
+// 12.3 泛型类
+class GenericNumber<T> {
+  zeroValue!: T;
+  add!: (x: T, y: T) => T;
+}
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function (x, y) {
+  return x + y;
+};
+
+// 12.4 泛型工具类
+// 1.typeof
+// 用来获取一个变量声明或对象的类型
+interface Person {
+  name: string;
+  age: number;
+}
+const sem: Person = { name: "Shaw", age: 33 };
+type Sem = typeof sem; // -> Person
+function toArray(x: number): Array<number> {
+  return [x];
+}
+type Func = typeof toArray; // -> (x: number) => number[]
+
+// 2.keyof
+// 用于获取某种类型的所有键，其返回类型是联合类型
+interface Person4 {
+  name: string;
+  age: number;
+}
+type K1 = keyof Person4; // "name" | "age"
+type K2 = keyof Person4[]; // "length" | "toString" | "pop" | "push" | "concat" | "join"
+type K3 = keyof { [x: string]: Person4 }; // string | number
+// 在 TypeScript 中支持两种索引签名，数字索引和字符串索引：
+interface StringArray {
+  // 字符串索引 -> keyof StringArray => string | number
+  [index: string]: string;
+}
+
+interface StringArray1 {
+  // 数字索引 -> keyof StringArray1 => number
+  [index: number]: string;
+}
+// 为了同时支持两种索引类型，就得要求数字索引的返回值必须是字符串索引返回值的子类。其中的原因就是当使用数值索引时，JavaScript 在执行索引操作时，会先把数值索引先转换为字符串索引。所以 keyof { [x: string]: Person } 的结果会返回 string | number。
+
+// 3.in
+// 用来遍历枚举类型
+type Keys = "a" | "b" | "c";
+type Obj = {
+  [p in Keys]: any;
+};
+
+// 4.infer
+// 在条件类型语句中，可以用infer声明一个类型变量并且对它进行使用
+type ReturnTypeS<T> = T extends (...args: any[]) => infer R ? R : any;
+// infer R 就是声明一个变量来承载传入函数签名的返回值类型，简单说就是用它取到函数返回值的类型方便之后使用
+
+// 5.extends
+// 有时候我们定义的泛型不想过于灵活或者说想继承某些类等，可以通过extends关键字添加泛型约束
+interface Lengthwise {
+  length: number;
+}
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+// loggingIdentity(3); // Error, number doesn't have a .length property
+loggingIdentity({ length: 3 });
+
+// 6. Partial
