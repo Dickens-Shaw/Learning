@@ -4,7 +4,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-07 17:13:32
+ * @LastEditTime: 2021-01-07 18:01:39
  * @FilePath: \Daily\TS\index.ts
  */
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
@@ -502,3 +502,4 @@ function loggingIdentity(arg) {
 }
 // loggingIdentity(3); // Error, number doesn't have a .length property
 loggingIdentity({ length: 3 });
+// 6. Partial
