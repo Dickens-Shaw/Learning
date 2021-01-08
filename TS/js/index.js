@@ -4,9 +4,15 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-07 18:01:39
+ * @LastEditTime: 2021-01-08 16:55:24
  * @FilePath: \Daily\TS\index.ts
  */
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
         throw new TypeError("attempted to set private field on non-instance");
@@ -19,17 +25,6 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
         throw new TypeError("attempted to get private field on non-instance");
     }
     return privateMap.get(receiver);
-};
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
 };
 var _name;
 // 二、基础类型
@@ -351,9 +346,9 @@ let person2 = {
     address: "Xiamen",
 };
 // 组装对象
-let personWithAge = Object.assign(Object.assign({}, person), { age: 33 });
+let personWithAge = { ...person, age: 33 };
 // 获取除了某些项外的其它项
-let { name3 } = person2, rest = __rest(person2, ["name3"]);
+let { name3, ...rest } = person2;
 let Shaw = {
     name: "Shaw",
     age: 33,
@@ -502,4 +497,32 @@ function loggingIdentity(arg) {
 }
 // loggingIdentity(3); // Error, number doesn't have a .length property
 loggingIdentity({ length: 3 });
-// 6. Partial
+function updateTodo(todo, filedsToUpdate) {
+    return { ...todo, ...filedsToUpdate };
+}
+const todo1 = {
+    title: "Learn TS",
+    description: "Learn TypeScript",
+};
+const todo2 = updateTodo(todo1, {
+    description: "Learn TypeScript Enum",
+});
+// 类装饰器顾名思义，就是用来装饰类的。它接收一个参数：
+// target: TFunctuin- 被装饰的类
+function Greeter2(greeting) {
+    return function (target) {
+        target.prototype.greet = function () {
+            console.log(greeting);
+        };
+    };
+}
+let Greeting = class Greeting {
+    constructor() {
+        // 内部实现
+    }
+};
+Greeting = __decorate([
+    Greeter2("Hello TS!")
+], Greeting);
+let myGreeting = new Greeting();
+myGreeting.greet(); // console output: 'Hello Semlinker!';

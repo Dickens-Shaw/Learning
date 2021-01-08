@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-07 18:01:39
+ * @LastEditTime: 2021-01-08 16:55:24
  * @FilePath: \Daily\TS\index.ts
  */
 
@@ -668,7 +668,7 @@ type Obj = {
 
 // 4.infer
 // 在条件类型语句中，可以用infer声明一个类型变量并且对它进行使用
-type ReturnTypeS<T> = T extends (...args: any[]) => infer R ? R : any;
+type ReturnType2<T> = T extends (...args: any[]) => infer R ? R : any;
 // infer R 就是声明一个变量来承载传入函数签名的返回值类型，简单说就是用它取到函数返回值的类型方便之后使用
 
 // 5.extends
@@ -684,3 +684,83 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
 loggingIdentity({ length: 3 });
 
 // 6. Partial
+// Partial<T>的作用就是将某个类型里面的属性全部变为可选性?。
+// 定义
+/**
+ * node_modules/typescript/lib/lib.es5.d.ts
+ * Make all properties in T optional
+ */
+type Partital2<T> = {
+  [P in keyof T]?: T[P];
+};
+// 在以上代码中，首先通过keyof T拿到T的所有属性名，然后使用in进行遍历，将值赋给P，最后通过T[P]取得相应的属性值。
+// 中间的?号，用于将所有属性变为可选。
+interface Todo {
+  title: string;
+  description: string;
+}
+function updateTodo(todo: Todo, filedsToUpdate: Partital2<Todo>) {
+  return { ...todo, ...filedsToUpdate };
+}
+const todo1 = {
+  title: "Learn TS",
+  description: "Learn TypeScript",
+};
+const todo2 = updateTodo(todo1, {
+  description: "Learn TypeScript Enum",
+});
+// 在上面updateTodo方法中，我们利用Partial<T>工具类型，定义filesToUpadate的类型为Partial<Todo>,即：
+type Partital3 = {
+  title?: string | undefined;
+  description?: string | undefined;
+};
+
+// 十三、装饰器
+// 13.1 定义
+/* 
+  是一个表达式
+  该表达式被执行后，返回一个函数
+  函数的入参分别为target、name和descriptor
+  执行该函数后，可能返回descriptor对象，用于配置target对象
+*/
+
+// 13.2 分类
+/* 
+  类装饰器 Class decorators
+  属性装饰器 Property decorators
+  方法装饰器 Method decorators
+  参数装饰器 Parameter decorators
+*/
+// 需要注意的是，若要启用实验性的装饰器特性，必须在命令行或tsconfig.json里面启用experimentalDecorators编译器选项
+// 命令行
+// tsc --target ES5 --experimentalDecorators
+
+// tsconfig.json：
+/* {
+  "compilerOptions": {
+     "target": "ES5",
+     "experimentalDecorators": true
+   }
+} */
+
+// 13.3 类装饰器
+declare type ClassDecorator2 = <TFunction extends Function>(
+  target: TFunction
+) => TFunction | void;
+// 类装饰器顾名思义，就是用来装饰类的。它接收一个参数：
+// target: TFunctuin- 被装饰的类
+function Greeter2(greeting: string) {
+  return function (target: Function): void {
+    target.prototype.greet = function (): void {
+      console.log(greeting);
+    };
+  };
+}
+@Greeter2("Hello TS!")
+class Greeting {
+  constructor() {
+    // 内部实现
+  }
+}
+let myGreeting = new Greeting();
+(myGreeting as any).greet(); // console output: 'Hello Semlinker!';
