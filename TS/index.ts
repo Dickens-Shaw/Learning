@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-11 14:35:08
+ * @LastEditTime: 2021-01-11 17:00:25
  * @FilePath: \Daily\TS\index.ts
  */
 
@@ -765,8 +765,7 @@ class Greeting {
 let myGreeting = new Greeting();
 (myGreeting as any).greet(); // console output: 'Hello Semlinker!';
 
-// 13.4
-// 属性装饰器声明
+// 13.4 属性装饰器
 declare type PropertyDecorator2 = (
   target: Object,
   propertyKey: string | symbol
@@ -782,4 +781,122 @@ function logProperty(target: any, key: string) {
     enumerable: true,
     configurable: true,
   });
+  const getter = function (this: any) {
+    const currVal = this[backingField];
+    console.log(`Get: ${key} => ${currVal}`);
+    return currVal;
+  };
+  const setter = function (this: any, newVal: any) {
+    console.log(`Set: ${key} => ${newVal}`);
+    this[backingField] = newVal;
+  };
+  Object.defineProperty(target, key, {
+    get: getter,
+    set: setter,
+    enumerable: true,
+    configurable: true,
+  });
+}
+class Person {
+  @logProperty
+  public name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+const p1 = new Person("shaw");
+p1.name = "dickens";
+
+// 13.5 方法装饰器
+declare type MethodDecorator2 = <T>(
+  target: Object,
+  propertyKey: string | symbol,
+  descriptor: TypedPropertyDescriptor<T>
+) => TypedPropertyDescriptor<T> | void;
+// 方法装饰器顾名思义，用来装饰类的方法。它接收三个参数：
+// target: Object - 被装饰的类
+// propertyKey: string | symbol - 方法名
+// descriptor: TypePropertyDescript - 属性描述符
+function log(
+  target: Object,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+) {
+  let originalMethod = descriptor.value;
+  descriptor.value = function (...args: any[]) {
+    console.log("wrapped function: before invoking " + propertyKey);
+    let result = originalMethod.apply(this, args);
+    console.log("wrapped function: after invoking " + propertyKey);
+    return result;
+  };
+}
+class Task {
+  @log
+  runTask(arg: any): any {
+    console.log("runTask invoked, args: " + arg);
+    return "finished";
+  }
+}
+let task = new Task();
+let result2 = task.runTask("learn TS");
+console.log("result:" + result2);
+/* 
+  "wrapped function: before invoking runTask" 
+  "runTask invoked, args: learn ts" 
+  "wrapped function: after invoking runTask" 
+  "result: finished" 
+*/
+
+// 13.6 参数装饰器
+declare type ParameterDecorator2 = (
+  target: Object,
+  propertyKey: string | symbol,
+  parameterIndex: number
+) => void;
+// 参数装饰器顾名思义，是用来装饰函数参数，它接收三个参数：
+// target: Object - 被装饰的类
+// propertyKey: string | symbol - 方法名
+// parameterIndex: number - 方法中参数的索引值
+function Log(target: Function, key: string, parameterIndex: number) {
+  let functionLogged = key || target.prototype.constructor.name;
+  console.log(`The parameter in position ${parameterIndex} at ${functionLogged} has
+	been decorated`);
+}
+class Greeter3 {
+  greeting: string;
+  constructor(@Log phrase: string) {
+    this.greeting = phrase;
+  }
+}
+// "The parameter in position 0 at Greeter has been decorated"
+
+// 十四、TypeScript4.0新特性
+// 14.1 构造函数的类属性推断
+// 当 noImplicitAny 配置属性被启用之后，TypeScript 4.0 就可以使用控制流分析来确认类中的属性类型
+class Person4 {
+  fullName; // (property) Person.fullName: string
+  firstName; // (property) Person.firstName: string | undefined
+  lastName; // (property) Person.lastName: string | undefined
+
+  constructor(fullName: string) {
+    this.fullName = fullName;
+    if (Math.random()) {
+      this.firstName = fullName.split(" ")[0];
+      this.lastName = fullName.split(" ")[1];
+    }
+  }
+}
+
+// 14.2 标记的元组元素
+// 为了提高开发者使用元组的体验，TypeScript 4.0 支持为元组类型设置标签：
+// 未使用标签的智能提示
+// addPerson(args_0: string, args_1: number): void
+function addPerson1(...args: [string, number]): void {
+  console.log(`Person info: name: ${args[0]}, age: ${args[1]}`);
+}
+
+// 已使用标签的智能提示
+// addPerson(name: string, age: number): void
+function addPerson2(...args: [name: string, age: number]): void {
+  console.log(`Person info: name: ${args[0]}, age: ${args[1]}`);
 }

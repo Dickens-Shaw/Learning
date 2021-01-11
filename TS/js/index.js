@@ -4,7 +4,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-08 16:55:24
+ * @LastEditTime: 2021-01-11 17:00:25
  * @FilePath: \Daily\TS\index.ts
  */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -12,6 +12,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
 };
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
@@ -526,3 +529,107 @@ Greeting = __decorate([
 ], Greeting);
 let myGreeting = new Greeting();
 myGreeting.greet(); // console output: 'Hello Semlinker!';
+// 属性装饰器顾名思义，用来装饰类的属性。它就收两个参数：
+// target: Object-被装饰的类
+// propertyKey: string | symbol-被装饰类的属性
+function logProperty(target, key) {
+    delete target[key];
+    const backingField = "_" + key;
+    Object.defineProperty(target, backingField, {
+        writable: true,
+        enumerable: true,
+        configurable: true,
+    });
+    const getter = function () {
+        const currVal = this[backingField];
+        console.log(`Get: ${key} => ${currVal}`);
+        return currVal;
+    };
+    const setter = function (newVal) {
+        console.log(`Set: ${key} => ${newVal}`);
+        this[backingField] = newVal;
+    };
+    Object.defineProperty(target, key, {
+        get: getter,
+        set: setter,
+        enumerable: true,
+        configurable: true,
+    });
+}
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+}
+__decorate([
+    logProperty
+], Person.prototype, "name", void 0);
+const p1 = new Person("shaw");
+p1.name = "dickens";
+// 方法装饰器顾名思义，用来装饰类的方法。它接收三个参数：
+// target: Object - 被装饰的类
+// propertyKey: string | symbol - 方法名
+// descriptor: TypePropertyDescript - 属性描述符
+function log(target, propertyKey, descriptor) {
+    let originalMethod = descriptor.value;
+    descriptor.value = function (...args) {
+        console.log("wrapped function: before invoking " + propertyKey);
+        let result = originalMethod.apply(this, args);
+        console.log("wrapped function: after invoking " + propertyKey);
+        return result;
+    };
+}
+class Task {
+    runTask(arg) {
+        console.log("runTask invoked, args: " + arg);
+        return "finished";
+    }
+}
+__decorate([
+    log
+], Task.prototype, "runTask", null);
+let task = new Task();
+let result2 = task.runTask("learn TS");
+console.log("result:" + result2);
+// 参数装饰器顾名思义，是用来装饰函数参数，它接收三个参数：
+// target: Object - 被装饰的类
+// propertyKey: string | symbol - 方法名
+// parameterIndex: number - 方法中参数的索引值
+function Log(target, key, parameterIndex) {
+    let functionLogged = key || target.prototype.constructor.name;
+    console.log(`The parameter in position ${parameterIndex} at ${functionLogged} has
+	been decorated`);
+}
+let Greeter3 = class Greeter3 {
+    constructor(phrase) {
+        this.greeting = phrase;
+    }
+};
+Greeter3 = __decorate([
+    __param(0, Log)
+], Greeter3);
+// "The parameter in position 0 at Greeter has been decorated"
+// 十四、TypeScript4.0新特性
+// 14.1 构造函数的类属性推断
+// 当 noImplicitAny 配置属性被启用之后，TypeScript 4.0 就可以使用控制流分析来确认类中的属性类型
+class Person4 {
+    constructor(fullName) {
+        this.fullName = fullName;
+        if (Math.random()) {
+            this.firstName = fullName.split(" ")[0];
+            this.lastName = fullName.split(" ")[1];
+        }
+    }
+}
+// 14.2 标记的元组元素
+// 为了提高开发者使用元组的体验，TypeScript 4.0 支持为元组类型设置标签：
+// 未使用标签的智能提示
+// addPerson(args_0: string, args_1: number): void
+function addPerson1(...args) {
+    console.log(`Person info: name: ${args[0]}, age: ${args[1]}`);
+}
+// 已使用标签的智能提示
+// addPerson(name: string, age: number): void
+function addPerson2(...args) {
+    console.log(`Person info: name: ${args[0]}, age: ${args[1]}`);
+}
