@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2020-12-30 18:32:24
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-08 16:55:24
+ * @LastEditTime: 2021-01-11 14:35:08
  * @FilePath: \Daily\TS\index.ts
  */
 
@@ -764,3 +764,22 @@ class Greeting {
 }
 let myGreeting = new Greeting();
 (myGreeting as any).greet(); // console output: 'Hello Semlinker!';
+
+// 13.4
+// 属性装饰器声明
+declare type PropertyDecorator2 = (
+  target: Object,
+  propertyKey: string | symbol
+) => void;
+// 属性装饰器顾名思义，用来装饰类的属性。它就收两个参数：
+// target: Object-被装饰的类
+// propertyKey: string | symbol-被装饰类的属性
+function logProperty(target: any, key: string) {
+  delete target[key];
+  const backingField = "_" + key;
+  Object.defineProperty(target, backingField, {
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  });
+}
