@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2021-01-18 15:27:04
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-19 08:56:28
+ * @LastEditTime: 2021-01-20 16:22:33
  * @FilePath: \Daily\Qiankun\qiankun-react\src\schedule.js
  */
 
@@ -14,6 +14,7 @@ import {
   TAG_TEXT,
   PLACEMENT,
 } from "./constants";
+import { setProps } from "./utils";
 
 /**
  * 从根节点开始渲染和调度
@@ -40,13 +41,23 @@ import {
 
 let nextUnitOfWork = null; // 下一个工作单元
 let workInProgressRoot = null; // RootFiber应用的根
-function scheduleRoot(rootFiber) {
+export function scheduleRoot(rootFiber) {
   workInProgressRoot = rootFiber;
   nextUnitOfWork = rootFiber;
 }
 
 function performUnitOfWork(currentFiber) {
   beginWork(currentFiber);
+  if (currentFiber.child) {
+    return currentFiber.child;
+  }
+  while (currentFiber) {
+    completeUnitOfWork(currentFiber);
+    if (currentFiber.sibling) {
+      return currentFiber.sibling;
+    }
+    currentFiber = currentFiber.return;
+  }
 }
 
 // 开始工作
@@ -54,23 +65,28 @@ function performUnitOfWork(currentFiber) {
 function beginWork(currentFiber) {
   if (currentFiber.tag === TAG_ROOT) {
     updateHostRoot(currentFiber);
+  } else if (currentFiber.tag === TAG_TEXT) {
+    updateHostText(currentFiber);
+  } else if (currentFiber.tag === TAG_HOST) {
+    updateHost(currentFiber);
   }
 }
 
 function updateHostRoot(currentFiber) {
   // 先处理自己 如果是一个原生节点，创建真实DOM
   let newChildren = currentFiber.props.children;
+  // 创建子Fiber
   reconcileChildren(currentFiber, newChildren);
 }
-
 function reconcileChildren(currentFiber, newChildren) {
   let newChildIndex = 0;
   let prevSibling;
+  // 遍历子VDOM元素数组，为每个VDOM元素创建子Fiber
   while (newChildIndex < newChildren.length) {
     let newChild = newChildren[newChildIndex]; // 取出元素节点
     let tag;
     if (newChild.type === ELEMENT_TEXT) {
-      tag = TAG_TEXT;
+      tag = TAG_TEXT; // 文本节点
     } else if (typeof newChild.type === "string") {
       tag = TAG_HOST;
     }
@@ -81,13 +97,67 @@ function reconcileChildren(currentFiber, newChildren) {
       stateNode: null,
       return: currentFiber,
       effectTag: PLACEMENT, // 副作用标识 render收集副作用增加、更新、删除
-      nexTEffect: "",
+      nextEffect: null, // effect list也是一个单链表
+      // effect list顺序和完成顺序是一样的
     };
+    if (newFiber) {
+      if (newChildIndex === 0) {
+        currentFiber.child = newFiber;
+      } else {
+        prevSibling.prevSibling = newFiber;
+      }
+      prevSibling = newFiber;
+    }
+    newChildIndex++;
   }
 }
 
+function updateHostText(currentFiber) {
+  if (!currentFiber.stateNode) {
+    // 如果此fiber没有创建DOM节点
+    currentFiber.stateNode = createDOM(currentFiber);
+  }
+}
+function updateHost(currentFiber) {
+  if (!currentFiber.stateNode) {
+    // 如果此fiber没有创建DOM节点
+    currentFiber.stateNode = createDOM(currentFiber);
+  }
+  const newChildren = currentFiber.props.children;
+  reconcileChildren(currentFiber, newChildren);
+}
+function createDOM(currentFiber) {
+  if (currentFiber.tag === TAG_TEXT) {
+    return document.createTextNode(currentFiber.props.text);
+  } else if (currentFiber.tag === TAG_HOST) {
+    let stateNode = document.createElement(currentFiber.type);
+    updateDOM(stateNode, {}, currentFiber.props);
+    return stateNode;
+  }
+}
+function updateDOM(stateNode, oldProps, newProps) {
+  setProps(stateNode, oldProps, newProps);
+}
+
 // 结束工作
-// completeUnitOfWork
+// completeUnitOfWork 收集有副作用的fiber，组成effect list
+// 每个fiber有两个属性 firstEffect(指向第一个有副作用的子fiber) lastEffect(指向最后一个)
+// 中间的用nextEffect做成一个单链表
+function completeUnitOfWork(currentFiber) {
+  let returnFiber = currentFiber.return;
+  if (returnFiber) {
+    const effectTag = currentFiber.effectTag;
+    if (effectTag) {
+      // 有副作用
+      if (returnFiber.lastEffect) {
+        returnFiber.lastEffect.nextEffect = currentFiber;
+      } else {
+        returnFiber.firstEffect = currentFiber;
+      }
+      returnFiber.lastEffect = currentFiber;
+    }
+  }
+}
 
 function workLoop(deadline) {
   let shouldYield = false; // 是否让出时间片（控制权）

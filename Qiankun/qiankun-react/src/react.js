@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2021-01-18 14:13:14
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-18 15:24:49
+ * @LastEditTime: 2021-01-20 15:58:35
  * @FilePath: \Daily\Qiankun\qiankun-react\src\react.js
  */
 
@@ -17,7 +17,7 @@ import { ELEMENT_TEXT } from "./constants";
  * @return {*}
  */
 console.log(ELEMENT_TEXT);
-function createElement(type, config, ...children) {
+function createElement(type, config, children) {
   delete config._self;
   delete config._source; //元素在哪行哪列哪个文件生成
   return {

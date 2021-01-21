@@ -1,9 +1,10 @@
 import React from "./react";
+import React2 from "react";
 // import ReactDOM from "react-dom";
 // JSX其实是一种特殊语法  在webpack打包或者babel编译的时候会编译成js
 
 let style = { border: "3px solid red", margin: "5px" };
-console.log(React);
+console.log(React, React2);
 let element = (
   <div id="A1" style={style}>
     <div id="B1" style={style}>
