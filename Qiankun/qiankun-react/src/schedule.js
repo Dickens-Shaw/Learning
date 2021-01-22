@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2021-01-18 15:27:04
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-20 16:22:33
+ * @LastEditTime: 2021-01-22 08:44:57
  * @FilePath: \Daily\Qiankun\qiankun-react\src\schedule.js
  */
 
@@ -141,11 +141,17 @@ function updateDOM(stateNode, oldProps, newProps) {
 
 // 结束工作
 // completeUnitOfWork 收集有副作用的fiber，组成effect list
+
 // 每个fiber有两个属性 firstEffect(指向第一个有副作用的子fiber) lastEffect(指向最后一个)
 // 中间的用nextEffect做成一个单链表
 function completeUnitOfWork(currentFiber) {
   let returnFiber = currentFiber.return;
   if (returnFiber) {
+    if (!returnFiber.firstEffect) {
+      returnFiber.firstEffect = currentFiber.firstEffect;
+    }
+    if (returnFiber.lastEffect) {
+    }
     const effectTag = currentFiber.effectTag;
     if (effectTag) {
       // 有副作用
