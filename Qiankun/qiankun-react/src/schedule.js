@@ -3,7 +3,7 @@
  * @Autor: Xdg
  * @Date: 2021-01-18 15:27:04
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-22 08:44:57
+ * @LastEditTime: 2021-01-22 15:21:22
  * @FilePath: \Daily\Qiankun\qiankun-react\src\schedule.js
  */
 
@@ -150,7 +150,13 @@ function completeUnitOfWork(currentFiber) {
     if (!returnFiber.firstEffect) {
       returnFiber.firstEffect = currentFiber.firstEffect;
     }
-    if (returnFiber.lastEffect) {
+
+    if (currentFiber.lastEffect) {
+      if (returnFiber.lastEffect) {
+        returnFiber.lastEffect.nextEffect = currentFiber.firstEffect;
+      } else {
+        returnFiber.lastEffect = currentFiber.lastEffect;
+      }
     }
     const effectTag = currentFiber.effectTag;
     if (effectTag) {
