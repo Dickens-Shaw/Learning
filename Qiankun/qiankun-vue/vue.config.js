@@ -3,11 +3,37 @@
  * @Autor: Xdg
  * @Date: 2021-01-25 11:46:48
  * @LastEditors: Xdg
- * @LastEditTime: 2021-01-25 14:55:29
+ * @LastEditTime: 2021-01-25 17:01:39
  */
 
 const autoprefixer = require("autoprefixer");
 const pxtorem = require("postcss-pxtorem");
+const merge = require("webpack-merge");
+const tsImportPluginFactory = require("ts-import-plugin");
+
+const mergeConfig = config => {
+  config.module
+    .rule("ts")
+    .use("ts-loader")
+    .tap(options => {
+      options = merge(options, {
+        transpileOnly: true,
+        getCustomTransformers: () => ({
+          before: [
+            tsImportPluginFactory({
+              libraryName: "vant",
+              libraryDirectory: "es",
+              style: true
+            })
+          ]
+        }),
+        compilerOptions: {
+          module: "es2015"
+        }
+      });
+      return options;
+    });
+};
 
 module.exports = {
   publicPath: "/",
@@ -24,6 +50,7 @@ module.exports = {
     disableHostCheck: true
   },
   css: {
+    modules: true, // 开启CSS module
     loaderOptions: {
       postcss: {
         plugins: [
@@ -48,6 +75,8 @@ module.exports = {
     }
   },
   chainWebpack: config => {
+    // ts-import-plugin 配置
+    mergeConfig(config);
     // * 移除prefetch和preload
     config.plugins.delete("prefetch");
     config.plugins.delete("preload");
