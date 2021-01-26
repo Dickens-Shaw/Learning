@@ -3,7 +3,8 @@ import HelloWorld from '@/components/HelloWorld'
 
 const Home = defineComponent({
   setup() {
-    return () => <HelloWorld msg={'Welcome to Your Vue.js + TypeScript App'} />
+    const msg = 'Welcome to Your Vue.js + TypeScript App'
+    return () => <HelloWorld msg= {msg} />
   }
 })
 

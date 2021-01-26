@@ -5,9 +5,9 @@ const HelloWorld = defineComponent({
   props: {
     msg: String
   },
-  setup() {
-    const handleShow = () => {
-      ElMessage.success('OK')
+  setup(props) {
+    const handleShow = (): void => {
+      ElMessage.success(props.msg)
     }
     return () => (
       <div class="hello">
