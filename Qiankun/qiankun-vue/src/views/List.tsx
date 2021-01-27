@@ -1,13 +1,13 @@
 import { defineComponent } from 'vue'
 
-const About = defineComponent({
+const List = defineComponent({
   setup() {
     return () => (
       <div>
-        <el-tag type="success">About me</el-tag>
+        <el-tag type="success">标签</el-tag>
       </div>
     )
   }
 })
 
-export default About
+export default List

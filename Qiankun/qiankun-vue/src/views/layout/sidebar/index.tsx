@@ -25,9 +25,9 @@ const Home = defineComponent({
     const classes = useStyles().value
     return () => (
       <el-aside width="200px" class={classes.sideBar}>
-        <router-link to="/home">Home</router-link>
-        <router-link to="/about">About</router-link>
-        <router-link to="/todo">Todo</router-link>
+        <router-link to="/home">主页</router-link>
+        <router-link to="/list">列表</router-link>
+        <router-link to="/detail">详情</router-link>
       </el-aside>
     )
   }

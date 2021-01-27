@@ -2,7 +2,7 @@ import { defineComponent } from 'vue'
 
 const Todo = defineComponent({
   setup() {
-    return () => <div>todo something.</div>
+    return () => <div>详情</div>
   }
 })
 
