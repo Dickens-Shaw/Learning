@@ -1,9 +1,9 @@
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const HelloWorld = defineComponent({
   props: {
-    msg: String
+    msg: String as PropType<string>
   },
   setup(props) {
     const handleShow = (): void => {
