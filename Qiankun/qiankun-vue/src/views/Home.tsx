@@ -3,7 +3,7 @@ import HelloWorld from '@/components/HelloWorld'
 
 const Home = defineComponent({
   setup() {
-    const msg = '主页内容'
+    const msg = 'HelloWorld'
     return () => <HelloWorld msg={msg} />
   }
 })

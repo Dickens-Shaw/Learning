@@ -12,7 +12,7 @@ const HelloWorld = defineComponent({
     return () => (
       <div class="hello">
         <el-button type="primary" onClick={handleShow}>
-          HelloWorld
+          主页
         </el-button>
       </div>
     )
