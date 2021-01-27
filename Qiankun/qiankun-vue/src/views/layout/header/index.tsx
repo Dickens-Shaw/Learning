@@ -3,8 +3,9 @@ import { createUseStyles } from 'vue-jss'
 
 const useStyles = createUseStyles({
   header: {
+    color: '#e5e5e5',
     lineHeight: '60px',
-    border: '1px solid gray'
+    backgroundColor: '#23252d'
   }
 })
 

@@ -5,15 +5,16 @@ import '@/assets/scss/app.scss'
 
 export default defineComponent({
   components: {
-    Header
+    Header,
+    Sidebar
   },
   setup() {
     return () => (
       <el-container class="main-container is-vertical">
         <Header title={'后台管理'} />
-        <el-container class="block-border">
+        <el-container>
           <Sidebar />
-          <el-main class="block-border">
+          <el-main>
             <router-view />
           </el-main>
         </el-container>

@@ -5,10 +5,14 @@ const useStyles = createUseStyles({
   sideBar: {
     display: 'flex',
     flexDirection: 'column',
+    borderRight: '1px solid #e6e6e6',
     '& > a': {
       padding: '0 20px',
       height: '56px',
       lineHeight: '56px',
+      '&:hover': {
+        backgroundColor: '#edf1fe'
+      },
       '&.router-link-exact-active': {
         color: '#4974f5'
       }
