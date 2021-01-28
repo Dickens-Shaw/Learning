@@ -34,7 +34,7 @@ const Test = defineComponent({
         })}
         Key: <el-input placeholder="请输入Key" v-model={state.value} />
         Value: <el-input placeholder="请输入Value" v-model={data.value} />
-        <el-button icon="el-icon-search" onClick={handleSet} />
+        <el-button icon="el-icon-search" onClick={() => handleSet()} />
       </div>
     )
   }
