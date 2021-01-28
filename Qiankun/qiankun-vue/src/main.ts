@@ -1,3 +1,5 @@
+// 增加tsx的支持
+import 'vue-tsx-support/enable-check'
 import { createApp } from 'vue'
 import App from './App'
 import router from './router'

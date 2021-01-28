@@ -195,9 +195,7 @@ input[type="reset"] {
   -webkit-appearance: none;
 }
 
-html {
-  ::selection {
-    color: #fff;
-    background: #0094ff;
-  }
+html::selection {
+  color: #fff;
+  background: #0094ff;
 }

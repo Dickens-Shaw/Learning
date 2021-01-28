@@ -2071,6 +2071,13 @@ aws4@^1.8.0:
   resolved "https://registry.npm.taobao.org/aws4/download/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha1-1h9G2DslGSUOJ4Ta9bCUeai0HFk=
 
+axios@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.npm.taobao.org/axios/download/axios-0.21.1.tgz?cache=0&sync_timestamp=1608609188013&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha1-IlY0gZYvTWvemnbVFu8OXTwJsrg=
+  dependencies:
+    follow-redirects "^1.10.0"
+
 babel-code-frame@^6.22.0:
   version "6.26.0"
   resolved "https://registry.npm.taobao.org/babel-code-frame/download/babel-code-frame-6.26.0.tgz#63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
@@ -4338,7 +4345,7 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   version "1.13.2"
   resolved "https://registry.npm.taobao.org/follow-redirects/download/follow-redirects-1.13.2.tgz#dd73c8effc12728ba5cf4259d760ea5fb83e3147"
   integrity sha1-3XPI7/wScoulz0JZ12DqX7g+MUc=
@@ -9100,6 +9107,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.npm.taobao.org/vm-browserify/download/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha1-eGQcSIuObKkadfUR56OzKobl3aA=
 
+vue-class-component@^7.1.0:
+  version "7.2.6"
+  resolved "https://registry.npm.taobao.org/vue-class-component/download/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
+  integrity sha1-hHHgN7jkdi9aRkaG4Z5a/HCFAuQ=
+
 vue-class-component@^8.0.0-0:
   version "8.0.0-rc.1"
   resolved "https://registry.npm.taobao.org/vue-class-component/download/vue-class-component-8.0.0-rc.1.tgz#db692cd97656eb9a08206c03d0b7398cdb1d9420"
@@ -9150,6 +9162,13 @@ vue-loader@^15.9.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-property-decorator@^8.3.0:
+  version "8.5.1"
+  resolved "https://registry.npm.taobao.org/vue-property-decorator/download/vue-property-decorator-8.5.1.tgz#571a91cf8d2b507f537d79bf8275af3184572fff"
+  integrity sha1-VxqRz40rUH9TfXm/gnWvMYRXL/8=
+  dependencies:
+    vue-class-component "^7.1.0"
+
 vue-router@^4.0.0-0:
   version "4.0.3"
   resolved "https://registry.npm.taobao.org/vue-router/download/vue-router-4.0.3.tgz?cache=0&sync_timestamp=1611586710783&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-router%2Fdownload%2Fvue-router-4.0.3.tgz#8b26050c88b2dec7e27a88835f71046b365823ec"
@@ -9168,6 +9187,11 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha1-HuO8mhbsv1EYvjNLsV+cRvgvWCU=
 
+vue-tsx-support@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/vue-tsx-support/download/vue-tsx-support-3.1.0.tgz#8de51116017c1bb16a665222bd3d9846f2a058a6"
+  integrity sha1-jeURFgF8G7FqZlIivT2YRvKgWKY=
+
 vue@^3.0.0:
   version "3.0.5"
   resolved "https://registry.npm.taobao.org/vue/download/vue-3.0.5.tgz#de1b82eba24abfe71e0970fc9b8d4b2babdc3fe1"
@@ -9176,6 +9200,11 @@ vue@^3.0.0:
     "@vue/compiler-dom" "3.0.5"
     "@vue/runtime-dom" "3.0.5"
     "@vue/shared" "3.0.5"
+
+vuex-class@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.npm.taobao.org/vuex-class/download/vuex-class-0.3.2.tgz#c7e96a076c1682137d4d23a8dcfdc63f220e17a8"
+  integrity sha1-x+lqB2wWghN9TSOo3P3GPyIOF6g=
 
 vuex@^4.0.0-0:
   version "4.0.0-rc.2"

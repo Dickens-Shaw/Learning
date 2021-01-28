@@ -22,12 +22,18 @@ const useStyles = createUseStyles({
 
 const Home = defineComponent({
   setup() {
+    const menuList = [
+      { url: '/home', text: '主页' },
+      { url: '/list', text: '列表' },
+      { url: '/detail', text: '详情' },
+      { url: '/test', text: '测试' }
+    ]
     const classes = useStyles().value
     return () => (
       <el-aside width="200px" class={classes.sideBar}>
-        <router-link to="/home">主页</router-link>
-        <router-link to="/list">列表</router-link>
-        <router-link to="/detail">详情</router-link>
+        {menuList.map(item => (
+          <router-link to={item.url}>{item.text}</router-link>
+        ))}
       </el-aside>
     )
   }
