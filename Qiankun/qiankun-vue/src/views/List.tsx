@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 const List = defineComponent({
   setup() {
@@ -23,7 +23,7 @@ const List = defineComponent({
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
       }
-    ]
+    ];
     return () => (
       <div>
         <el-table data={tableData} style="width: 100%">
@@ -40,8 +40,8 @@ const List = defineComponent({
           <el-table-column prop="address" label="地址"></el-table-column>
         </el-table>
       </div>
-    )
+    );
   }
-})
+});
 
-export default List
+export default List;

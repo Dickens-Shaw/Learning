@@ -1,7 +1,7 @@
-import { defineComponent } from 'vue'
-import Header from './header/index'
-import Sidebar from './sidebar/index'
-import '@/assets/scss/app.scss'
+import { defineComponent } from 'vue';
+import Header from './header/index';
+import Sidebar from './sidebar/index';
+import '@/assets/scss/app.scss';
 
 export default defineComponent({
   components: {
@@ -19,6 +19,6 @@ export default defineComponent({
           </el-main>
         </el-container>
       </el-container>
-    )
+    );
   }
-})
+});

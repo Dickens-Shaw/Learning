@@ -1,4 +1,4 @@
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref, Ref } from 'vue';
 
 const Todo = defineComponent({
   setup() {
@@ -11,7 +11,7 @@ const Todo = defineComponent({
       type: [],
       resource: '',
       desc: ''
-    })
+    });
     const rules: object = {
       name: [
         { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -48,26 +48,26 @@ const Todo = defineComponent({
         { required: true, message: '请选择活动资源', trigger: 'change' }
       ],
       desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
-    }
+    };
 
-    const formRef: Ref<any> = ref(null)
-    console.log(formRef)
+    const formRef: Ref<any> = ref(null);
+    console.log(formRef);
 
     function submitForm(params: string) {
-      console.log(params, formRef.value)
+      console.log(params, formRef.value);
       formRef.value.validate((valid: boolean) => {
         if (valid) {
-          alert('submit!')
+          alert('submit!');
         } else {
-          console.log('error submit!!')
-          return false
+          console.log('error submit!!');
+          return false;
         }
-      })
+      });
     }
 
     function resetForm(params: string) {
-      console.log(params, formRef.value)
-      formRef.value.resetFields()
+      console.log(params, formRef.value);
+      formRef.value.resetFields();
     }
 
     return () => (
@@ -138,8 +138,8 @@ const Todo = defineComponent({
           <el-button onClick={() => resetForm('ruleForm')}>重置</el-button>
         </el-form-item>
       </el-form>
-    )
+    );
   }
-})
+});
 
-export default Todo
+export default Todo;

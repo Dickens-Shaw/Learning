@@ -1,5 +1,6 @@
-import { defineComponent } from 'vue'
-import { createUseStyles } from 'vue-jss'
+import { defineComponent, getCurrentInstance } from 'vue';
+import { createUseStyles } from 'vue-jss';
+import NavItem from './NavItem';
 
 const useStyles = createUseStyles({
   sideBar: {
@@ -18,25 +19,22 @@ const useStyles = createUseStyles({
       }
     }
   }
-})
+});
 
 const Home = defineComponent({
   setup() {
-    const menuList = [
-      { url: '/home', text: '主页' },
-      { url: '/list', text: '列表' },
-      { url: '/detail', text: '详情' },
-      { url: '/test', text: '测试' }
-    ]
-    const classes = useStyles().value
+    const { ctx }: any = getCurrentInstance();
+    const router: [] = ctx.$router.options.routes[0].children;
+    const classes = useStyles().value;
     return () => (
       <el-aside width="200px" class={classes.sideBar}>
-        {menuList.map(item => (
-          <router-link to={item.url}>{item.text}</router-link>
-        ))}
+        <el-menu router>
+          {router.map(item => (
+            <NavItem itemData={item} />
+          ))}
+        </el-menu>
       </el-aside>
-    )
+    );
   }
-})
-
-export default Home
+});
+export default Home;

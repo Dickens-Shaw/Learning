@@ -1,10 +1,9 @@
 import { defineComponent } from 'vue';
-import '@/assets/scss/app.scss';
 
-const App = defineComponent({
+const Children = defineComponent({
   setup() {
     return () => <router-view />;
   }
 });
 
-export default App;
+export default Children;

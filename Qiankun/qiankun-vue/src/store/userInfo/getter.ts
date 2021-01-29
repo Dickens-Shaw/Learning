@@ -1,3 +1,3 @@
 export const userInfo = (state: any) => {
-  return state.userInfo
-}
+  return state.userInfo;
+};

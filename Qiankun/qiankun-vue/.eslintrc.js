@@ -12,10 +12,11 @@ module.exports = {
     ecmaVersion: 2020
   },
   rules: {
+    'semi': ['error', 'always'],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'space-before-function-paren': 'off',
-    '@typescript-eslint/no-explicit-any': ['off']
+    '@typescript-eslint/no-explicit-any': ['off'],
   },
   overrides: [
     {
@@ -28,4 +29,4 @@ module.exports = {
       }
     }
   ]
-}
+};
