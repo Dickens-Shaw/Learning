@@ -3,8 +3,8 @@ import userInfo from './userInfo';
 
 export default createStore({
   state: {
-    client: 'PC',
-    browser: 'Chorme'
+    time: new Date(),
+    userAgent: navigator.userAgent
   },
   getters: {},
   mutations: {},

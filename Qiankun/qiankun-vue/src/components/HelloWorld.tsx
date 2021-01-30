@@ -18,9 +18,19 @@ const HelloWorld = defineComponent({
     };
     return () => (
       <div class="hello">
-        <el-button type="primary" onClick={handleShow}>
-          点击跳转
-        </el-button>
+        <p>
+          ELEMENT_PLUS:
+          <el-button type="primary" onClick={handleShow}>
+            点击跳转
+          </el-button>
+        </p>
+        <br />
+        <p>
+          ANTD_VUE:
+          <a-button type="primary" onClick={handleShow}>
+            点击跳转
+          </a-button>
+        </p>
       </div>
     );
   }

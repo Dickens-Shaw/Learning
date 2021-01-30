@@ -24,10 +24,47 @@ const List = defineComponent({
         address: '上海市普陀区金沙江路 1516 弄'
       }
     ];
+
+    const columns = [
+      {
+        title: 'Name',
+        dataIndex: 'name'
+      },
+      {
+        title: 'Age',
+        dataIndex: 'age'
+      },
+      {
+        title: 'Address',
+        dataIndex: 'address'
+      }
+    ];
+    const data = [
+      {
+        key: '1',
+        name: 'John Brown',
+        age: 32,
+        address: 'New York No. 1 Lake Park'
+      },
+      {
+        key: '2',
+        name: 'Jim Green',
+        age: 42,
+        address: 'London No. 1 Lake Park'
+      },
+      {
+        key: '3',
+        name: 'Joe Black',
+        age: 32,
+        address: 'Sidney No. 1 Lake Park'
+      }
+    ];
+
     return () => (
       <div>
         <p>列表：</p>
         <br />
+        <p>ELEMENT_PLUS:</p>
         <el-table data={tableData} style="width: 100%">
           <el-table-column
             prop="date"
@@ -41,6 +78,9 @@ const List = defineComponent({
           ></el-table-column>
           <el-table-column prop="address" label="地址"></el-table-column>
         </el-table>
+        <br />
+        <p>ANTD_VUE:</p>
+        <a-table columns={columns} data-source={data} size="middle" />
       </div>
     );
   }

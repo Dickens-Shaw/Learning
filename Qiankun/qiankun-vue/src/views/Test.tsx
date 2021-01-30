@@ -13,11 +13,11 @@ const Test = defineComponent({
     });
     watchEffect(() => console.log('监听reactive---', data.value));
 
-    const handleSet = () => {
+    const handleSet = (key: string) => {
       console.log(state.value);
       store.commit('userInfo/SET_USER_INFO', {
-        key: state.value,
-        value: data.value
+        key,
+        value: key.includes('Name') ? state.value : data.value
       });
     };
 
@@ -27,9 +27,13 @@ const Test = defineComponent({
         <br />
         <p>Key(ref): {state.value}</p>
         <el-input placeholder="请输入Key" v-model={state.value} />
+        <el-button
+          icon="el-icon-setting"
+          onClick={() => handleSet('userName')}
+        />
         <p>Value(reactive): {data.value}</p>
         <el-input placeholder="请输入Value" v-model={data.value} />
-        <el-button icon="el-icon-setting" onClick={() => handleSet()} />
+        <el-button icon="el-icon-setting" onClick={() => handleSet('userId')} />
       </div>
     );
   }

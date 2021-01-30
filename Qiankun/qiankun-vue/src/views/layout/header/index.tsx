@@ -22,7 +22,7 @@ const Header = defineComponent({
     const States = store.state;
     return () => (
       <el-header class={classes.header}>
-        <h1>{props.title}</h1>
+        <div>{props.title}</div>
         <p>{States.userInfo.userName + '/' + States.userInfo.userId}</p>
       </el-header>
     );
