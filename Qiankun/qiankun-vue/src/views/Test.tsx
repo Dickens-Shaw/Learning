@@ -14,7 +14,6 @@ const Test = defineComponent({
     watchEffect(() => console.log('监听reactive---', data.value));
 
     const handleSet = (key: string) => {
-      console.log(state.value);
       store.commit('userInfo/SET_USER_INFO', {
         key,
         value: key.includes('Name') ? state.value : data.value

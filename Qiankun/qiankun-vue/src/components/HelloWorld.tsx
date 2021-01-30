@@ -9,7 +9,6 @@ const HelloWorld = defineComponent({
     const { ctx }: any = getCurrentInstance();
     const handleShow = (): void => {
       ElMessage.success('跳转' + props.path);
-      console.log(ctx);
       setTimeout(() => {
         ctx.$router.push({
           path: props.path
