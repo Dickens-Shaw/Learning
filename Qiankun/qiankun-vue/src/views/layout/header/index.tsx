@@ -1,8 +1,11 @@
 import { defineComponent, PropType } from 'vue';
 import { createUseStyles } from 'vue-jss';
+import { useStore } from 'vuex';
 
 const useStyles = createUseStyles({
   header: {
+    display: 'flex',
+    justifyContent: 'space-between',
     color: '#e5e5e5',
     lineHeight: '60px',
     backgroundColor: '#23252d'
@@ -15,7 +18,14 @@ const Header = defineComponent({
   },
   setup(props) {
     const classes = useStyles().value;
-    return () => <el-header class={classes.header}>{props.title}</el-header>;
+    const store = useStore();
+    const States = store.state;
+    return () => (
+      <el-header class={classes.header}>
+        <h1>{props.title}</h1>
+        <p>{States.userInfo.userName + '/' + States.userInfo.userId}</p>
+      </el-header>
+    );
   }
 });
 

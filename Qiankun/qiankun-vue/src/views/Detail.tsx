@@ -1,4 +1,5 @@
 import { defineComponent, reactive, ref, Ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
 const Todo = defineComponent({
   setup() {
@@ -51,22 +52,20 @@ const Todo = defineComponent({
     };
 
     const formRef: Ref<any> = ref(null);
-    console.log(formRef);
 
-    function submitForm(params: string) {
-      console.log(params, formRef.value);
+    function submitForm() {
       formRef.value.validate((valid: boolean) => {
         if (valid) {
-          alert('submit!');
+          console.log(ruleForm);
+          ElMessage.success('验证成功!');
         } else {
-          console.log('error submit!!');
+          ElMessage.error('验证失败!');
           return false;
         }
       });
     }
 
-    function resetForm(params: string) {
-      console.log(params, formRef.value);
+    function resetForm() {
       formRef.value.resetFields();
     }
 
@@ -78,6 +77,8 @@ const Todo = defineComponent({
         label-width="100px"
         class="demo-ruleForm"
       >
+        <p>表单：</p>
+        <br />
         <el-form-item label="活动名称" prop="name">
           <el-input v-model={ruleForm.name}></el-input>
         </el-form-item>
@@ -132,10 +133,10 @@ const Todo = defineComponent({
           <el-input type="textarea" v-model={ruleForm.desc}></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" onClick={() => submitForm('ruleForm')}>
+          <el-button type="primary" onClick={submitForm}>
             立即创建
           </el-button>
-          <el-button onClick={() => resetForm('ruleForm')}>重置</el-button>
+          <el-button onClick={resetForm}>重置</el-button>
         </el-form-item>
       </el-form>
     );

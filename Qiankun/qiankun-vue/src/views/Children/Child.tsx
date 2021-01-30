@@ -17,7 +17,7 @@ const Child = defineComponent({
         routerChange();
       }
     );
-    return () => <div>{title}</div>;
+    return () => <div>监听路由改变(watch&useRoute): {title}</div>;
   }
 });
 

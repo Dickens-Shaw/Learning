@@ -26,6 +26,8 @@ const List = defineComponent({
     ];
     return () => (
       <div>
+        <p>列表：</p>
+        <br />
         <el-table data={tableData} style="width: 100%">
           <el-table-column
             prop="date"

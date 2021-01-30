@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance } from 'vue';
 import { createUseStyles } from 'vue-jss';
-import NavItem from './NavItem';
+import NavList from './components/NavList';
 
 const useStyles = createUseStyles({
   sideBar: {
@@ -28,11 +28,7 @@ const Home = defineComponent({
     const classes = useStyles().value;
     return () => (
       <el-aside width="200px" class={classes.sideBar}>
-        <el-menu router>
-          {router.map(item => (
-            <NavItem itemData={item} />
-          ))}
-        </el-menu>
+        <NavList listData={router} />
       </el-aside>
     );
   }

@@ -8,7 +8,7 @@ const HelloWorld = defineComponent({
   setup(props) {
     const { ctx }: any = getCurrentInstance();
     const handleShow = (): void => {
-      ElMessage.success('1s后跳转' + props.path);
+      ElMessage.success('跳转' + props.path);
       console.log(ctx);
       setTimeout(() => {
         ctx.$router.push({

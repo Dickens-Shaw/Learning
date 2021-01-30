@@ -4,17 +4,14 @@ import { useStore } from 'vuex';
 const Test = defineComponent({
   setup() {
     const store = useStore();
-    const States = store.state;
-    console.log('-------------', store);
 
-    const state: Ref<string> = ref('userName');
+    const state: Ref<string> = ref('');
+    watchEffect(() => console.log('监听ref---', state.value));
+
     const data = reactive({
-      value: 'Shaw'
+      value: ''
     });
-
-    watchEffect(() => {
-      console.log('监听---', state.value, data);
-    });
+    watchEffect(() => console.log('监听reactive---', data.value));
 
     const handleSet = () => {
       console.log(state.value);
@@ -26,19 +23,13 @@ const Test = defineComponent({
 
     return () => (
       <div>
-        <p>{state.value}</p>
-        <p>{data.value}</p>
-        {Object.keys(States).map(key => {
-          const value = States[key];
-          return (
-            <p>
-              {key}: {typeof value === 'string' ? value : JSON.stringify(value)}
-            </p>
-          );
-        })}
-        Key: <el-input placeholder="请输入Key" v-model={state.value} />
-        Value: <el-input placeholder="请输入Value" v-model={data.value} />
-        <el-button icon="el-icon-search" onClick={() => handleSet()} />
+        <p>修改Vuex-userInfo：</p>
+        <br />
+        <p>Key(ref): {state.value}</p>
+        <el-input placeholder="请输入Key" v-model={state.value} />
+        <p>Value(reactive): {data.value}</p>
+        <el-input placeholder="请输入Value" v-model={data.value} />
+        <el-button icon="el-icon-setting" onClick={() => handleSet()} />
       </div>
     );
   }

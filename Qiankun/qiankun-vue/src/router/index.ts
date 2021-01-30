@@ -49,7 +49,7 @@ const routes: Array<RouteRecordRaw> = [
           title: '子路由'
         },
         component: () =>
-          import(/* webpackChunkName: "detail" */ '../views/Children'),
+          import(/* webpackChunkName: "detail" */ '../views/children'),
         children: [
           {
             path: '/child/1',
@@ -58,7 +58,7 @@ const routes: Array<RouteRecordRaw> = [
               title: '子路由1'
             },
             component: () =>
-              import(/* webpackChunkName: "detail" */ '../views/Child')
+              import(/* webpackChunkName: "detail" */ '../views/children/Child')
           },
           {
             path: '/child/2',
@@ -67,7 +67,7 @@ const routes: Array<RouteRecordRaw> = [
               title: '子路由2'
             },
             component: () =>
-              import(/* webpackChunkName: "detail" */ '../views/Child')
+              import(/* webpackChunkName: "detail" */ '../views/children/Child')
           }
         ]
       }

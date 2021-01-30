@@ -1,6 +1,6 @@
 const state = {
-  userName: 'Shaw',
-  userId: '123'
+  userName: 'Default',
+  userId: '***'
 };
 
 export default state;
