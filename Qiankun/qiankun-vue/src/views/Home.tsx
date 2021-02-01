@@ -8,7 +8,7 @@ const Home = defineComponent({
     const States = store.state;
     const path = '/list';
     return () => (
-      <div>
+      <>
         <p>Vuex(useStore)：</p>
         {Object.keys(States).map(key => {
           const value = States[key];
@@ -21,7 +21,7 @@ const Home = defineComponent({
         <br />
         <p>Router(getCurrentInstance)：</p>
         <HelloWorld path={path} />
-      </div>
+      </>
     );
   }
 });

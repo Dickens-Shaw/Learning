@@ -21,7 +21,7 @@ const Test = defineComponent({
     };
 
     return () => (
-      <div>
+      <>
         <p>修改Vuex-userInfo：</p>
         <br />
         <p>Key(ref): {state.value}</p>
@@ -33,7 +33,7 @@ const Test = defineComponent({
         <p>Value(reactive): {data.value}</p>
         <el-input placeholder="请输入Value" v-model={data.value} />
         <el-button icon="el-icon-setting" onClick={() => handleSet('userId')} />
-      </div>
+      </>
     );
   }
 });

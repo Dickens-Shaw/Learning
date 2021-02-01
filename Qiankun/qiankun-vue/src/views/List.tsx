@@ -61,7 +61,7 @@ const List = defineComponent({
     ];
 
     return () => (
-      <div>
+      <>
         <p>列表：</p>
         <br />
         <p>ELEMENT_PLUS:</p>
@@ -81,7 +81,7 @@ const List = defineComponent({
         <br />
         <p>ANTD_VUE:</p>
         <a-table columns={columns} data-source={data} size="middle" />
-      </div>
+      </>
     );
   }
 });
