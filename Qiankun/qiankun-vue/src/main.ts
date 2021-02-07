@@ -8,9 +8,11 @@ import { eleComponents } from './plugins/element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
 import { antComponents } from './plugins/antd-vue';
 
-const app = createApp(App)
-  .use(store)
-  .use(router);
+console.log('------createApp', createApp);
+const app = createApp(App);
+console.log('------app', App, app);
+
+app.use(store).use(router);
 
 eleComponents.forEach((component: any) => {
   app.use(component);

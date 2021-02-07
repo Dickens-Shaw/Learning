@@ -19,7 +19,7 @@
     "vue-class-component": "^8.0.0-0",
     "vue-jss": "^0.0.4",
     "vue-property-decorator": "^8.3.0",
-    "vue-router": "^4.0.0-0",
+    "vue-router": "^4.0.3",
     "vue-tsx-support": "^3.1.0",
     "vuex": "^4.0.0-0",
     "vuex-class": "^0.3.2"

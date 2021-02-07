@@ -6,7 +6,6 @@ const App = defineComponent({
     return () => <router-view />;
   }
 });
-
 export default App;
 
 /* import { Vue, Component } from 'vue-property-decorator';
