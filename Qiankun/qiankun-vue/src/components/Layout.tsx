@@ -1,8 +1,11 @@
-import { defineComponent } from 'vue';
+import { defineComponent,PropType } from 'vue';
 
 const Layout = defineComponent({
-  setup() {
-    return () => <div>布局</div>;
+  props: {
+    title: String as PropType<string>
+  },
+  setup(props) {
+    return () => <div>布局{props.title}</div>;
   }
 });
 export default Layout;
