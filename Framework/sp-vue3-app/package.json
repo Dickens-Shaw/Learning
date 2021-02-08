@@ -1,0 +1,72 @@
+{
+  "name": "subapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "private": true,
+  "author": "sp",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "sp-scripts start",
+    "build": "sp-scripts build",
+    "format": "sp-scripts format",
+    "lint": "sp-scripts lint",
+    "analyse": "sp-scripts analyse",
+    "copy": "sp-scripts copy"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "git add . && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./src/**/*.{js,vue}": [
+      "prettier --write",
+      "eslint",
+      "git add ."
+    ]
+  },
+  "commonDependencies": {
+    "vue": "^3.0.5",
+    "vue-router": "^4.0.3",
+    "axios": "^0.21.0"
+  },
+  "dependencies": {
+    "@fe/common": "^0.0.8",
+    "@fe/element-ui": "^2.15.5",
+    "@vue/babel-plugin-jsx": "^1.0.3",
+    "ant-design-vue": "^2.0.0-rc.9",
+    "babel-loader": "^8.2.2",
+    "element-plus": "^1.0.2-beta.30",
+    "jss": "^10.5.1",
+    "jss-preset-default": "^10.5.1",
+    "mitt": "^2.1.0",
+    "single-spa": "^5.6.1",
+    "single-spa-vue": "^2.0.0",
+    "vue-jss": "^0.0.4",
+    "vuex": "^4.0.0"
+  },
+  "devDependencies": {
+    "@fe/sp-scripts": "next",
+    "core-js": "^3.7.0",
+    "postcss": "^8.1.1",
+    "postcss-loader": "^4.0.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/@fe/sp-scripts/scripts/lint.js"
+    ]
+  },
+  "prettier": "./node_modules/@fe/sp-scripts/scripts/prettier.js",
+  "babel": {
+    "extends": "@fe/sp-scripts/scripts/babel.js"
+  },
+  "browserslist": [
+    "chrome >= 30",
+    "firefox >= 30",
+    "ie >= 11",
+    "safari >= 7",
+    "ios >= 6",
+    "android >= 4"
+  ]
+}
