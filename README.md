@@ -1,4 +1,4 @@
-# Daily
+# Learning
 
 Still need to leran something more..
 
